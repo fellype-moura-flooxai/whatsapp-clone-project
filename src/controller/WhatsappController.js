@@ -297,7 +297,7 @@ class WhatsappController {
 
         this._recordMicrophoneInterval = setInterval(()=>{
 
-            this.el.RecordMicrophoneTimer.innerHTML = (Date.now() - start);1
+            this.el.RecordMicrophoneTimer.innerHTML = Format.toTime(Date.now() - start);1
 
 
         },100);
