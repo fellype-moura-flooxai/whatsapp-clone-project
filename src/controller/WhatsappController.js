@@ -345,7 +345,26 @@ class WhatsappController {
                     img.classList.add(name);
                 });
 
-                this.el.inputText.appendChild(img);
+                let cursor = window.getSelection();
+
+                if (!cursor.focusNode || !cursor.focusNode.id == 'input-text') {
+                    this.el.inputText.focus();
+                    cursor = window.getSelection();
+
+                }
+
+                let range = document.createRange();
+
+                range = cursor.getRangeAT(0);
+                range.deleteContents();
+
+                let frag = document.createDocumentFragment();
+
+                frag.appendChild(img);
+
+                range.insertNode(frag);
+
+                range.setStartAfter(img);
 
                 this.el.input.dispatchEvent(new Event('keyup'));
 
