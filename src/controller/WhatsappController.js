@@ -1,4 +1,7 @@
-class WhatsappController {
+import {Format} from './../util/Format';
+import {CameraController} from './CameraController';
+
+export class WhatsappController {
 
     constructor (){
 
