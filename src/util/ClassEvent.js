@@ -6,7 +6,7 @@ export class ClassEvent {
 
     }
 
-    on(eventNames, fn){
+    on(eventName, fn){
 
         if (!this._events[eventName]) this._events[eventName] = new arrayBuffer();
 

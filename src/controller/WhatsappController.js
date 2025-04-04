@@ -372,14 +372,16 @@ export class WhatsappController {
         this.el.btnSendMicrophone.on('click', e=>{
 
             this.el.recordMicrophone.show();
-            this.btnSendMicrophone.hide();
+            this.el.btnSendMicrophone.hide();
             this.startRecordMicrophoneTime();
 
             this._microphoneController = new MicrophoneController();
 
-            this._microphoneController.on('play', musica=>{
+            this._microphoneController.on('ready', musica=>{
 
-                console.log('recebi o vento play', musica);
+                console.log('ready event');
+
+               this._microphoneController.startRecorder();
 
 
             });   
@@ -388,7 +390,7 @@ export class WhatsappController {
 
         this.el.btnCancelMicrophone.on('click',e=>{
 
-            this._microphoneController.stop();
+            this._microphoneController.stopRecorder();
             this.closeRecordMicrophone();
 
 
@@ -396,7 +398,7 @@ export class WhatsappController {
 
         this.el.btnFinishMicrophone.on('click',e=>{
 
-            this._microphoneController.stop();
+            this._microphoneController.stopRecorder();
             this.closeRecordMicrophone();
 
         });
@@ -460,7 +462,7 @@ export class WhatsappController {
 
                 let cursor = window.getSelection();
 
-                if (!cursor.focusNode || !cursor.focusNode.id == 'input-text') {
+                if (!cursor.focusNode || cursor.focusNode.id !== 'input-text') {
                     this.el.inputText.focus();
                     cursor = window.getSelection();
 
@@ -468,7 +470,7 @@ export class WhatsappController {
 
                 let range = document.createRange();
 
-                range = cursor.getRangeAT(0);
+                range = cursor.getRangeAt(0);
                 range.deleteContents();
 
                 let frag = document.createDocumentFragment();
@@ -479,7 +481,7 @@ export class WhatsappController {
 
                 range.setStartAfter(img);
 
-                this.el.input.dispatchEvent(new Event('keyup'));
+                this.el.inputText.dispatchEvent(new Event('keyup'));
 
             });
 
@@ -506,7 +508,7 @@ export class WhatsappController {
     closeRecordMicrophone(){
 
         this.el.recordMicrophone.hide();
-        this.btnSendMicrophone.show();
+        this.el.btnSendMicrophone.show();
         clearInterval(this._recordMicrophoneInterval);
 
 
