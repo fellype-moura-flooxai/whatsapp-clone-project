@@ -2,6 +2,7 @@ import {Format} from './../util/Format';
 import {CameraController} from './CameraController';
 import {MicrophoneController} from './MicrophoneController';
 import {DocumentPreviewController} from './DocumentPreviewController';
+import { Firebase } from './../util/Firebase';
 
 export class WhatsappController {
 
@@ -9,9 +10,29 @@ export class WhatsappController {
 
         console.log('WhatsappController ok');
 
+        this._firebase = new Firebase();
+        this.initAuth();
         this.elementsPrototype();
         this.loadElements();
         this.initEvents();
+
+    }
+
+    initAuth(){
+
+        this._firebase.initAuth()
+        .then(response=>{
+            
+            this._user = response.user;
+
+            this.el.appContent.css({
+                display:'flex'
+            });
+
+        })
+        .catch(err=>{
+            console.error(err);
+        });
 
     }
 

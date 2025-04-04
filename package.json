@@ -19,8 +19,9 @@
   },
   "homepage": "https://github.com/fellype-moura-flooxai/whatsapp-clone-project#readme",
   "dependencies": {
-    "pdfjs-dist": "^2.0.489",
+    "pdfjs-dist": "2.0.489",
     "webpack": "^3.1.0",
-    "webpack-dev-server": "^2.5.1"
+    "webpack-dev-server": "^2.5.1",
+    "firebase": "^4.13.1"
   }
 }
