@@ -3,6 +3,7 @@ import {CameraController} from './CameraController';
 import {MicrophoneController} from './MicrophoneController';
 import {DocumentPreviewController} from './DocumentPreviewController';
 import { Firebase } from './../util/Firebase';
+import { User } from './../model/User';
 
 export class WhatsappController {
 
@@ -23,11 +24,21 @@ export class WhatsappController {
         this._firebase.initAuth()
         .then(response=>{
             
-            this._user = response.user;
+            this._user = new User();
+
+           let userRef =  User.findByEmail(response.user.email);
+
+           userRef.set({
+                name: response.user.displayName,
+                email: response.user.email,
+                photo: response.user.photoURL,
+           }).then(()=>{
 
             this.el.appContent.css({
                 display:'flex'
             });
+
+           });
 
         })
         .catch(err=>{
