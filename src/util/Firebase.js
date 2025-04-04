@@ -1,7 +1,6 @@
 const firebase = require('firebase');
 require('firebase/firestore');
 
-
 export class Firebase {
 
     constructor(){
@@ -25,7 +24,7 @@ export class Firebase {
             if (!window._initializedFirebase) {
                 firebase.initializeApp(this._config);
 
-                firebase.firestore().firestore().settings({
+                firebase.firestore().settings({
                     timestampsInSnapshots: true
                 });
 
@@ -48,7 +47,7 @@ export class Firebase {
 
                 return new Promise((s, f)=>{
 
-                    let providar = new firebase.auth.GoogleAuthProvider();
+                    let provider = new firebase.auth.GoogleAuthProvider();
 
                 firebase.auth().signInWithPopup(provider)
                 .then(result => {
