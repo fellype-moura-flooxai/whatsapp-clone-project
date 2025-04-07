@@ -323,6 +323,18 @@ export class WhatsappController {
 
     initEvents(){
 
+        this.el.inputSearchcontacts.on('keyup', e=>{
+
+            if (this.el.inputSearchcontacts.value.length > 0) {
+                this.el.inputSearchcontactsPlaceHolder.hide();
+            } else {
+                this.this.el.inputSearchcontactsPlaceHolder.show();
+            }
+
+            this._user.getContacts(this.el.inputSearchcontacts.value);
+
+        });
+
         this.el.myPhoto.on('click', e=>{
 
             this.closeAllLeftPanel();
