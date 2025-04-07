@@ -196,19 +196,34 @@ export class WhatsappController {
 
                             let data = doc.data();
                             data.id = doc.id;
+
+                            let message = new Message();
+
+                            message.fromJSON(data);
+
+                            let me = (data.from === this._user.email);
                             
-                            if (!this.el.panelMessagesContainer.querySelector('#_' + data.id))
-                            {
+                            if (!this.el.panelMessagesContainer.querySelector('#_' + data.id)) {
 
-                                let message = new Message();
+                                if (!me) {
 
-                                message.fromJSON(data);
+                                    doc.ref.set({
+                                        status: 'read'
+                                    }, {
+                                        merge: true
+                                    });
 
-                                let me = (data.from === this._user.email);
+                                }
 
                                 let view = message.getViewElement(me);
 
                                 this.el.panelMessagesContainer.appendChild(view);
+
+                            } else {
+
+                                let msgEl = !this.el.panelMessagesContainer.querySelector('#_' + data.id);
+
+                                msgEl.querySelector('.message-status').innerHTML = message.getStatusViewElement().outerHTML;
 
                             }
 
