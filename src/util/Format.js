@@ -27,5 +27,19 @@ static toTime(duration){
 
 }
 
+static dateToTime(date, locale = 'pt-BR'){
+
+    return date.toLocalTimeString(locale, {
+        hours: '2-digit',
+        minutes: '2-digit'
+    });
+}
+
+static timeStampToTime(timeStamp){
+
+    return (timeStamp && typeof timeStamp.toDate === 'function') ? 
+    Format.dateToTime(timeStamp.toDate()) : '';
+}
+
 
 }
