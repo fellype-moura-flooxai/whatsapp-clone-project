@@ -4,6 +4,7 @@ import {MicrophoneController} from './MicrophoneController';
 import {DocumentPreviewController} from './DocumentPreviewController';
 import { Firebase } from './../util/Firebase';
 import { User } from './../model/User';
+import { Chat } from './../model/Chat';
 
 export class WhatsappController {
 
@@ -37,7 +38,7 @@ export class WhatsappController {
                     let photo = this.el.imgPanelEditProfile;
                     photo.src = data.photo;
                     photo.show();
-                    this.el.imgEmojiDefaultPanelEditProfile.hide();
+                    this.el.imgDefaultPanelEditProfile.hide();
 
                     let photo2 = this.el.myPhoto.querySelector('img');
                     photo2.src = data.photo;
@@ -62,7 +63,7 @@ export class WhatsappController {
             });
 
         })
-        .catch(err=>{
+        .catch((err)=>{
             console.error(err);
         });
 
@@ -72,7 +73,7 @@ export class WhatsappController {
      
         this._user.on('contactschange', docs => {
 
-            this.el.contactsMessages.innerHTML = '';
+            this.el.contactsMessagesList.innerHTML = '';
 
             docs.forEach(doc => {
 
@@ -142,6 +143,8 @@ export class WhatsappController {
                 }
 
                 div.on('click', e=> {
+
+                    console.log('chatId', contact.chatId);
 
                     this.el.activeName.innerHTML = contact.name;
                     this.el.activeStatus.innerHTML = contact.status;
@@ -325,14 +328,14 @@ export class WhatsappController {
 
             this._user.save().then(()=>{
 
-                this.el.btnSavePanelEditProfile.disabled = falsef;
+                this.el.btnSavePanelEditProfile.disabled = false;
 
 
             });
 
         });
 
-        this.el.formPanelAddContact.on('submit', e=>{
+        this.el.formPanelAddContact.on('submit', e =>{
 
             e.preventDefault();
 
@@ -344,12 +347,22 @@ export class WhatsappController {
 
                 if (data.name) {
 
-                    this._user.addContact(contact).then(()=>{
+                    Chat.createIfNotExists(this._user,email, contact.email).then(chat => {
 
-                        this.el.btnClosePanelAddContact.click();
-                        console.log.info('Contato foi adicionado!');
+                        contact.chatId = chat.id;
 
-                    })
+                        this._user.chatId = chat.id;
+
+                        contact.addContact(this._user);
+
+                        this._user.addContact(contact).then(()=>{
+
+                            this.el.btnClosePanelAddContact.click();
+                            console.log.info('Contato foi adicionado!');
+    
+                        });
+
+                    });   
 
                 }   else {
 
@@ -463,7 +476,7 @@ export class WhatsappController {
 
         this.el.inputDocument.on('change', e=>{
 
-            if (this.el.inputDocument.file.length) {
+            if (this.el.inputDocument.files.length) {
 
                 this.el.panelDocumentPreview.css({
                     'height': '1%'
@@ -507,7 +520,7 @@ export class WhatsappController {
                     break;
 
                     case 'application/vnd.msword':
-                    case 'application/vnd.openxmlformats-officedocument.wordprocessinml.document':
+                    case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
                         this.el.iconPanelDocumentPreview.className = 'jcxhw icon-doc-doc'; 
 
                     default:
@@ -572,7 +585,7 @@ export class WhatsappController {
 
             this._microphoneController.on('recordTimer', timer => {
 
-                this.el.RecordMicrophoneTimer.innerHTML = Format.toTime(Timer);
+                this.el.RecordMicrophoneTimer.innerHTML = Format.toTime(timer);
 
             });
             
