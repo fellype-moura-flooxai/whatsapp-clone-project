@@ -34,7 +34,7 @@ export class MicrophoneController extends ClassEvent {
 
     stop(){
 
-        this._stream.getTracks().forEach(track=>{
+        this._stream.getTracks().forEach(track => {
             track.stop();
         });
 
@@ -45,14 +45,14 @@ export class MicrophoneController extends ClassEvent {
         if (this.isAvailable()) {
 
             this._mediRecorder = new MediaRecorder(this._stream, {
-                mimetype: this._mimeType     
+                mimeType: this._mimeType     
             });
 
             this._recordedChunks = [];
 
             this._mediaRecorder.addEventListener('dataavailable', e=>{
 
-                if (e.data.size >0) this._recordedChunks.push(e.data);
+                if (e.data.size > 0) this._recordedChunks.push(e.data);
 
             });
 
@@ -64,12 +64,26 @@ export class MicrophoneController extends ClassEvent {
 
                 let filename = `rec${Date.now()}.webm`;
 
-                let file = new File([blob], filename, {
-                    type: this._mimeType,
-                    lastModified: Date.now()
-                });
+                let audioContext = new AudioContext();
 
-                console.log('file', file);
+                let reader = new FileReader();
+
+                reader.onload = e => {
+
+                    audioContext.decodeAudioData(reader.result).then(decode=>{
+
+                        let file = new File([blob], filename, {
+                            type: this._mimeType,
+                            lastModified: Date.now()
+                        });
+
+                        this.trigger('recorded', file, decode);
+
+                    });
+  
+                }
+
+                reader.readAsArraybuffer(blob);
 
             });
 
