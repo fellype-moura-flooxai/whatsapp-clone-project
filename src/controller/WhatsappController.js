@@ -6,6 +6,7 @@ import { Firebase } from './../util/Firebase';
 import { User } from './../model/User';
 import { Chat } from './../model/Chat';
 import { Message } from './../model/Message'
+import { Base64 } from "../utilBase64";
 
 export class WhatsappController {
 
@@ -220,6 +221,15 @@ export class WhatsappController {
                                 this.el.panelMessagesContainer.appendChild(view);
 
                             } else {
+
+                                let view = message.getViewElement(me);
+
+                                this.el.panelMessagesContainer.querySelector('#_' + data.id).innerHTML = view.innerHTML;
+
+
+                            }
+                            
+                            if(this.el.panelMessagesContainer.querySelector('#_' + data.id) && me) {
 
                                 let msgEl = !this.el.panelMessagesContainer.querySelector('#_' + data.id);
 
@@ -677,7 +687,30 @@ export class WhatsappController {
 
         this.el.btnSendDocument.on('click', e=>{
 
-            console.log('send document');
+            let file = this.el.inputDocument.files.files[0];
+            let base64 =  this.el.imgPanelDocumentPreview.src;
+
+            if (file.type === 'application/pdf') {
+
+                Base64.toFile(base64).then(filePreview => {
+
+                    Message.sendDocument(
+                    this._contactActive.chatId,
+                    this._user.email, file, filePreview, this.el.infoPanelDocumentPreview.innerHTML);
+
+                });
+
+            } else {
+
+                    Message.sendDocument(
+                    this._contactActive.chatId,
+                    this._user.email, file);
+
+            }
+
+            this.el.btnClosePanelDocumentPreview.click();
+
+            
             
         });
 
