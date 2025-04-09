@@ -1,21 +1,21 @@
-import {Format} from './../util/Format';
+import {Format} from '../util/Format';
 import {CameraController} from './CameraController';
 import {MicrophoneController} from './MicrophoneController';
 import {DocumentPreviewController} from './DocumentPreviewController';
-import { Firebase } from './../util/Firebase';
-import { User } from './../model/User';
-import { Chat } from './../model/Chat';
-import { Message } from './../model/Message'
+import { Firebase } from '../util/Firebase';
+import { User } from '../model/User';
+import { Chat } from '../model/Chat';
+import { Message } from '../model/Message';
 import { Base64 } from '../util/Base64';
-import { contactsController } from '../controller/ContactsController';
-import { Upload } from './../util/Upload';
+import { ContactsController } from '../controller/ContactsController';
+import { Upload } from '../util/Upload';
 
 
-export class WhatsappController {
+export class WhatsAppController {
 
     constructor (){
 
-        console.log('WhatsappController ok');
+        console.log('WhatsAppController ok');
 
         this._firebase = new Firebase();
         this.initAuth();
@@ -82,7 +82,7 @@ export class WhatsappController {
 
             docs.forEach(doc => {
 
-                let contact = doc.dat();
+                let contact = doc.data();
                 let div = document.createElement('div');
 
                 div.className = 'contact-item';
@@ -110,7 +110,7 @@ export class WhatsappController {
                                         class="_1wjpf">${contact.name}</span>
                                     </div>
                                     <div class="_3Bxar">
-                                        <span class="_3T2VG">${contact.lastMessageTime}
+                                        <span class="_3T2VG">${Format.timeStampToTime(contact.lastMessageTime)}
                                         </span>
                                     </div>
                                 </div>
@@ -149,7 +149,7 @@ export class WhatsappController {
 
                 div.on('click', e=> {
 
-                    setActiveChat(contact)
+                   this.setActiveChat(contact)
 
                 });
 
@@ -233,7 +233,7 @@ export class WhatsappController {
                             
                             if(this.el.panelMessagesContainer.querySelector('#_' + data.id) && me) {
 
-                                let msgEl = !this.el.panelMessagesContainer.querySelector('#_' + data.id);
+                                let msgEl = this.el.panelMessagesContainer.querySelector('#_' + data.id);
 
                                 msgEl.querySelector('.message-status').innerHTML = message.getStatusViewElement().outerHTML;
 
@@ -243,7 +243,7 @@ export class WhatsappController {
 
                                 view.querySelector('.btn-message-send').on('click', e=>{
 
-                                    Chat.createIfNotExists(this._user,email, message.content.email).then(chat => {
+                                    Chat.createIfNotExists(this._user.email, message.content.email).then(chat => {
 
                                         let contact = new User(message.content.email);
 
@@ -379,12 +379,12 @@ export class WhatsappController {
 
     initEvents(){
 
-        this.el.inputSearchcontacts.on('keyup', e=>{
+        this.el.inputSearchContacts.on('keyup', e=>{
 
             if (this.el.inputSearchcontacts.value.length > 0) {
                 this.el.inputSearchcontactsPlaceHolder.hide();
             } else {
-                this.this.el.inputSearchcontactsPlaceHolder.show();
+                this.el.inputSearchcontactsPlaceHolder.show();
             }
 
             this._user.getContacts(this.el.inputSearchcontacts.value);
@@ -445,7 +445,7 @@ export class WhatsappController {
                     this._user.save().then(()=>{
 
                         this.el.btnClosePanelEditProfile.click();
-                        
+
                     });
 
                 });
@@ -495,7 +495,7 @@ export class WhatsappController {
 
                 if (data.name) {
 
-                    Chat.createIfNotExists(this._user,email, contact.email).then(chat => {
+                    Chat.createIfNotExists(this._user.email, contact.email).then(chat => {
 
                         contact.chatId = chat.id;
 
@@ -506,7 +506,7 @@ export class WhatsappController {
                         this._user.addContact(contact).then(()=>{
 
                             this.el.btnClosePanelAddContact.click();
-                            console.log.info('Contato foi adicionado!');
+                            console.log('Contato foi adicionado!');
     
                         });
 
@@ -711,7 +711,7 @@ export class WhatsappController {
 
                     break;
 
-                    case 'application/vnd.msword':
+                    case 'application/msword':
                     case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
                         this.el.iconPanelDocumentPreview.className = 'jcxhw icon-doc-doc'; 
 
@@ -742,7 +742,7 @@ export class WhatsappController {
 
         this.el.btnSendDocument.on('click', e=>{
 
-            let file = this.el.inputDocument.files.files[0];
+            let file = this.el.inputDocument.files[0];
             let base64 =  this.el.imgPanelDocumentPreview.src;
 
             if (file.type === 'application/pdf') {
@@ -772,7 +772,7 @@ export class WhatsappController {
 
         this.el.btnAttachContact.on('click', e=>{
 
-           this._contactsController = new contactsController(this.el.modalContacts, this._user);
+           this._contactsController = new ContactsController(this.el.modalContacts, this._user);
 
            this._contactsController.on('select', contact => {
 
@@ -791,7 +791,7 @@ export class WhatsappController {
 
         this.el.btnCloseModalContacts.on('click', e=>{
 
-            this._contactsController.open();
+            this._contactsController.close();
         });
 
         this.el.btnSendMicrophone.on('click', e=>{
@@ -812,7 +812,7 @@ export class WhatsappController {
 
             this._microphoneController.on('recordTimer', timer => {
 
-                this.el.RecordMicrophoneTimer.innerHTML = Format.toTime(timer);
+                this.el.recordMicrophoneTimer.innerHTML = Format.toTime(timer);
 
             });
             
@@ -860,7 +860,7 @@ export class WhatsappController {
 
         this.el.inputText.on('keyup', e=>{
 
-            if (this.el.inputText.innerHTML.length) {
+            if (this.el.inputText.textContent.length || this.el.inputText.querySelector('img')) {
 
                 this.el.inputPlaceholder.hide();
                 this.el.btnSendMicrophone.hide();
@@ -891,7 +891,7 @@ export class WhatsappController {
 
         });
 
-        this.el.btnEmojis.on('click', e=>{
+        this.el.btnEmojis.on('click', e =>{
 
             this.el.panelEmojis.toggleClass('open');
 
@@ -899,7 +899,7 @@ export class WhatsappController {
 
         this.el.panelEmojis.querySelectorAll('.emojik').forEach(emoji=>{
 
-            emoji.on('click', e=>{
+            emoji.on('click', e => {
 
                 let img = this.el.imgEmojiDefault.cloneNode();
 
@@ -907,14 +907,15 @@ export class WhatsappController {
                 img.dataset.unicode = emoji.dataset.unicode;
                 img.alt = emoji.dataset.unicode;
 
-                emoji.classList.forEach(name=>{
+                emoji.classList.forEach(name =>{
                     img.classList.add(name);
                 });
 
                 let cursor = window.getSelection();
+                let inputText = this.el.inputText;
 
-                if (!cursor.focusNode || cursor.focusNode.id !== 'input-text') {
-                    this.el.inputText.focus();
+                if (!cursor.focusNode || !inputText.contains(cursor.focusNode)) {
+                    inputText.focus();
                     cursor = window.getSelection();
 
                 }
@@ -960,7 +961,7 @@ export class WhatsappController {
 
     };
 
-    closeMenuAttach() {
+    closeMenuAttach(e) {
 
         document.removeEventListener('click', this.closeMenuAttach);
         this.el.menuAttach.removeClass('open');
@@ -969,8 +970,9 @@ export class WhatsappController {
 
     closeAllLeftPanel(){
 
-        this.el.panelAddContact.hide()
         this.el.panelEditProfile.hide();
+        this.el.panelAddContact.hide()
+        
 
 
 

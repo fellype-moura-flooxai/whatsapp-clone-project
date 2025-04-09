@@ -368,7 +368,7 @@ export class Message extends Model {
                                     </div>
                                     <div class="_2f-RV">
                                         <div class="_1DZAH">
-                                            <span class="message-time">${Format.timeStampToTime($this.timeStamp)}</span>
+                                            <span class="message-time">${Format.timeStampToTime(this.timeStamp)}</span>
                                         </div>
                                     </div>
                                 </div>

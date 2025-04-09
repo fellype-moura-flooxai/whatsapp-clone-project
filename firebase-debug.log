@@ -1,0 +1,37 @@
+[debug] [2025-04-09T11:31:06.017Z] ----------------------------------------------------------------------
+[debug] [2025-04-09T11:31:06.018Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Fellype\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase init functions
+[debug] [2025-04-09T11:31:06.018Z] CLI Version:   3.18.4
+[debug] [2025-04-09T11:31:06.018Z] Platform:      win32
+[debug] [2025-04-09T11:31:06.018Z] Node Version:  v8.11.1
+[debug] [2025-04-09T11:31:06.019Z] Time:          Wed Apr 09 2025 08:31:06 GMT-0300 (Hora oficial do Brasil)
+[debug] [2025-04-09T11:31:06.019Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-04-09T11:31:06.024Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase"]
+[debug] [2025-04-09T11:31:06.024Z] > authorizing via signed-in user
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\Fellype\Documents\whatsapp-clone-project
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2025-04-09T11:31:10.306Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects  
+  
+ Wed Apr 09 2025 08:31:10 GMT-0300 (Hora oficial do Brasil)
+[debug] [2025-04-09T11:31:31.584Z] Error: connect ETIMEDOUT 104.197.85.31:443
+    at Object._errnoException (util.js:1022:11)
+    at _exceptionWithHostPort (util.js:1044:20)
+    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1198:14)
+[error] 
+[error] Error: Server Error. connect ETIMEDOUT 104.197.85.31:443

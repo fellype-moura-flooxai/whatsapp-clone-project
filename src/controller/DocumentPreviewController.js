@@ -53,7 +53,7 @@ getPreviewData(){
 
                         let canvas = document.createElement('canvas');
 
-                        let context = canvas.getContext('2d');
+                        let canvasContext = canvas.getContext('2d');
 
                         canvas.width = viewport.width;
                         canvas.height = viewport.height;
@@ -66,7 +66,7 @@ getPreviewData(){
                             let _s = (pdf.numPages > 1) ? 's' : '';
 
                             s({
-                                src: canvas.toDataURL('image/pgn'),
+                                src: canvas.toDataURL('image/png'),
                                 info: `${pdf.numPages} página${_s}`
                             });
 

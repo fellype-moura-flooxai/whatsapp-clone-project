@@ -8,13 +8,13 @@ export class MicrophoneController extends ClassEvent {
 
         this._mimeType = 'audio/webm';
 
-        this.available = false;
+        this._available = false;
 
         navigator.mediaDevices.getUserMedia({
             audio: true
         }).then(stream=>{
 
-            this.available = true;
+            this. _available = true;
 
             this._stream = stream;
 
@@ -44,7 +44,7 @@ export class MicrophoneController extends ClassEvent {
 
         if (this.isAvailable()) {
 
-            this._mediRecorder = new MediaRecorder(this._stream, {
+            this._mediaRecorder = new MediaRecorder(this._stream, {
                 mimeType: this._mimeType     
             });
 
@@ -58,7 +58,7 @@ export class MicrophoneController extends ClassEvent {
 
             this._mediaRecorder.addEventListener('stop', e =>{
 
-                let blob = new Blob(this._recordedChunk, {
+                let blob = new Blob(this._recordedChunks, {
                     type: this._mimeType
                 });
 
@@ -83,7 +83,7 @@ export class MicrophoneController extends ClassEvent {
   
                 }
 
-                reader.readAsArraybuffer(blob);
+                reader.readAsArrayBuffer(blob);
 
             });
 
@@ -101,7 +101,7 @@ export class MicrophoneController extends ClassEvent {
 
             this._mediaRecorder.stop();
             this.stop();
-            this.startTimer();
+            this.stopTimer();
             
         }
 
@@ -113,7 +113,7 @@ export class MicrophoneController extends ClassEvent {
         
             this._recordMicrophoneInterval = setInterval(()=>{
 
-                this.trigger('recordertimer', (Date.now() - start));
+                this.trigger('recordtimer', (Date.now() - start));
         
          },100);
         

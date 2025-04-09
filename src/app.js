@@ -1,3 +1,3 @@
-import {WhatsappController} from './controller/WhatsappController';
+import { WhatsAppController } from './controller/WhatsAppController'
 
-window.app = new WhatsappController();
+window.app = new WhatsAppController();

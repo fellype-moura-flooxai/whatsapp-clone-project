@@ -57,7 +57,7 @@ static find(meEmail, contactEmail){
 
 static createIfNotExists(meEmail, contactEmail){
 
-    return new Promise((S, f)=>{
+    return new Promise((s, f)=>{
 
         Chat.find(meEmail, contactEmail).then(chats => {
 
@@ -65,7 +65,7 @@ static createIfNotExists(meEmail, contactEmail){
 
                 Chat.create(meEmail, contactEmail).then(chat=>{
 
-                    S(chat);
+                    s(chat);
 
                 });
 
